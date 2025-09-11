@@ -16,6 +16,7 @@ A aplicação deve ser limpa e leve para rodar tanto no web comum qunato no web 
     - Data de entrega
     - status (in progress, done)
 
+
 ## s
 
 1. Editar as propriedades de um card
