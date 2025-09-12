@@ -9,17 +9,26 @@ sequenceDiagram
 participant User
 participant Browser
 participant Server
+participant DB
 
 User->>Browser: Abre aplicação
-Browser->>Server: Requisição HTTP (GET /home)
-Server-->>Browser: Retorna a pagina HTML
-Browser->>User: Renderiza pagina
+Browser->>Server: HTTP GET /home
+Server-->>Browser: Retorna página HTML
+Browser-->>User: Renderiza página inicial
 
-Browser->>Server: Requisição HTTP (GET /api/cards)
+Browser->>Server: HTTP GET /api/cards
 alt cards.length > 0
-Server-->>Browser: Retorna cards
-Browser->>User: Renderiza cards
+Server->>DB: Busca cards
+DB-->>Server: Retorna lista de cards
+loop Para cada card
+Server-->>Browser: Retorna card
+Browser-->>User: Renderiza card
 end
+else nenhum card
+Server-->>Browser: Retorna lista vazia
+Browser-->>User: Exibe mensagem "Nenhum card encontrado"
+end
+
 ```
 
 ### Criar Novo Card
@@ -31,18 +40,21 @@ participant Browser
 participant Server
 participant DB
 
-User->>Browser: Cria card
+User->>Browser: Clica em "Novo Card"
+opt abrir modal
 Browser-->>User: Renderiza modal de criação de card
-User->>Browser: Confirma a criação do card
+end
+
+User->>Browser: Preenche dados e confirma criação
 Browser->>Browser: Valida os campos do card
-alt campos validos
-Browser->>Server: Requisição HTTP (POST /api/cards)
-Server->>DB: Salva card
-DB-->>Server: Retorna card
+alt Campos válidos
+Browser->>Server: HTTP POST /api/cards
+Server->>DB: Salva novo card
+DB-->>Server: Retorna card criado
 Server-->>Browser: Retorna card
-Browser-->>User: Renderiza card
-else
-Browser-->>User: Renderiza modal de criação de card informando o erro
+Browser-->>User: Renderiza novo card
+else Campos inválidos
+Browser-->>User: Exibe erros no modal de criação
 end
 ```
 
@@ -55,21 +67,26 @@ participant Browser
 participant Server
 participant DB
 
-User->>Browser: Seleciona um card
-Browser-->>User: Renderiz o card na tela
-User->>Browser: Adiciona os novos dados e confirma as alterações
-Browser->>Server: Requisição HTTP (PUT /api/cards/{id})
+User->>Browser: Seleciona card para edição
+Browser-->>User: Abre modal com dados do card
+
+User->>Browser: Altera dados e confirma
+Browser->>Browser: Valida alterações
+alt Campos válidos
+Browser->>Server: HTTP PUT /api/cards/{id}
 Server->>DB: Atualiza card
-alt card atualizado
-DB-->>Server: Retorna card
-Server-->>Browser: Retorna card
-Browser-->>User: Confirma as alterações e renderiza card
-else
+alt Atualização bem-sucedida
+DB-->>Server: Retorna card atualizado
+Server-->>Browser: Retorna card atualizado
+Browser-->>User: Renderiza card atualizado
+else Erro na atualização
 DB-->>Server: Retorna erro
 Server-->>Browser: Retorna erro
-Browser-->>User: notifica o erro
+Browser-->>User: Notifica falha na atualização
 end
-
+else Campos inválidos
+Browser-->>User: Exibe erros no formulário
+end
 ```
 
 ### Deletar Card
@@ -81,21 +98,21 @@ participant Browser
 participant Server
 participant DB
 
-User->>Browser: Seleciona um card
-Browser-->>User: Renderiz o card na tela
-User->>Browser: confirma que vai deletar o card 
-Browser->>Server: Requisição HTTP (DELETE /api/cards/{id})
+User->>Browser: Seleciona card
+Browser-->>User: Exibe card e opções
+
+User->>Browser: Confirma exclusão
+Browser->>Server: HTTP DELETE /api/cards/{id}
 Server->>DB: Deleta card
-alt card deletado
-DB-->>Server: Retorna o status de deletado
-Server-->>Browser: confirma que o card foi deletado
-Browser-->>User: apaga card, modal e notifica
-else
+alt Card deletado
+DB-->>Server: Confirma exclusão
+Server-->>Browser: Retorna sucesso
+Browser-->>User: Remove card da tela e notifica exclusão
+else Erro ao deletar
 DB-->>Server: Retorna erro
 Server-->>Browser: Retorna erro
-Browser-->>User: notifica o erro
+Browser-->>User: Notifica falha ao deletar card
 end
-
 ```
 
 ### Mudar Status
@@ -107,9 +124,17 @@ participant Browser
 participant Server
 participant DB
 
-User->>Browser: Seleciona um card, o arasta para outra coluna
-Browser-->>User: Renderiza o card na nova coluna
-Browser->>Server: Requisição HTTP (PUT /api/cards/{id})
+User->>Browser: Arrasta card para outra coluna
+Browser-->>User: Atualiza posição visualmente
+Browser->>Server: HTTP PUT /api/cards/{id} (atualizar status)
 Server->>DB: Atualiza status do card
-DB-->>Server: Confirma que foi atualizado
+alt Atualização bem-sucedida
+DB-->>Server: Confirma atualização
+Server-->>Browser: Retorna card atualizado
+Browser-->>User: Renderiza card na nova coluna
+else Erro ao atualizar
+DB-->>Server: Retorna erro
+Server-->>Browser: Retorna erro
+Browser-->>User: Notifica falha ao atualizar status
+end
 ```
