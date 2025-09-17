@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Kanban Bord</title>
+    <link rel="stylesheet" href="/src/style/global.css">
+  </head>
+  <body>
+    <article class="modal">
+      <div>
+        <input type="text" placeholder="Titulo do card">
+        <input type="text" placeholder="Descrição do card">
+        <div>
+          <button>Adicionar</button>
+          <button>Cancelar</button>
+        </div>
+      </div>
+    </article>
+    <section class="bord">
+      <div class="header-bord color-blue">
+        <h1>Backlog</h1>
+        <span>0</span>
+        <button>...</button>
+        <button class="addCard">+</button>
+      </div>
+      <article class="body-bord color-blue dragzone" id="1">
+        <div class="card">
+          <h2>Titulo do card</h2>
+          <p>Descrição do card</p>
+          <button>...</button>
+          <div class="opt">
+            <button>Editar</button>
+            <button>Excluir</button>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="bord">
+      <div class="header-bord color-orange">
+        <h1>In Progress</h1>
+        <span>0</span>
+        <button>...</button>
+        <button class="addCard">+</button>
+      </div>
+      <article class="body-bord color-orange dragzone" id="2">
+      </article>
+    </section>
+
+    <section class="bord">
+      <div class="header-bord color-green">
+        <h1>Nome da Tabela</h1>
+        <span>0</span>
+        <button>...</button>
+        <button class="addCard">+</button>
+      </div>
+      <article class="body-bord color-green dragzone" id="3">
+      </article>
+    </section>
+    <script src="/src/main.js" type="module" defer></script>
+  </body>
+</html>

@@ -1,0 +1,8 @@
+.bord {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 4px;
+  width: 30vw;
+  min-width: 400px;
+}

@@ -1,0 +1,43 @@
+@import url('/src/style/header-bord.css');
+@import url('/src/style/card.css');
+@import url('/src/style/body-bord.css');
+@import url('/src/style/bord.css');
+@import url('/src/style/animation.css');
+@import url('/src/style/modal.css');
+
+button {
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  color: var(--neutral-color-black-500);
+  font-size: 2em;
+}
+
+.color-blue {
+  border-color: var(--primary-color-blue);
+  & ::before {
+    background-color: var(--primary-color-blue);
+  }
+}
+
+.color-orange {
+  border-color: var(--primary-color-orange);
+  & ::before {
+    background-color: var(--primary-color-orange);
+  }
+}
+
+.color-green {
+  border-color: var(--primary-color-green);
+  & ::before {
+    background-color: var(--primary-color-green);
+  }
+}
+
+.dragging {
+  opacity: 0.5;
+}
+
+.dragover {
+  background-color: var(--neutral-color-white-500);
+}

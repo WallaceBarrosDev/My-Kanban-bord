@@ -1,0 +1,29 @@
+@import url(/src/style/root.css);
+@import url(/src/style/component.css);
+
+body {
+  display: flex;
+  justify-content: start;
+  min-height: 100vh;
+  background-color: var(--neutral-color-white-100);
+  color: var(--neutral-color-black-500);
+  margin: 0 5vw;
+}
+
+@media screen and (max-width: 600px) {
+  body {
+    margin: 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .header-bord > button {
+    font-size: 2.5em;
+  }
+
+  .body-bord {
+    min-height: 10vh;
+    padding-bottom: 10vh;
+  }
+}

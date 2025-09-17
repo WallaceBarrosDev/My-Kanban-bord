@@ -1,0 +1,9 @@
+.body-bord {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  background-color: var(--neutral-color-white-200);
+  min-height: 80vh;
+  border-radius: 4px;
+}
