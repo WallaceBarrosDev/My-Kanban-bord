@@ -1,10 +1,22 @@
 const cards = document.querySelectorAll('.card');
 const bords = document.querySelectorAll('.bord');
 const modal = document.querySelector('.modal');
-const inputTitle = modal.querySelectorAll('input')[0];
-const inputDescription = modal.querySelectorAll('input')[1];
-let atualBord;
+const inputTitle = modal.querySelector('input');
+const inputDescription = modal.querySelector('textarea');
 const myCustonEvent = new Event('myCustonEvent');
+
+function addStoregeCards() {
+  bords.forEach((bord, index) => {
+    const bodyBord = bord.querySelector('.body-bord');
+    const cards = getCards();
+    cards.forEach(card => {
+      if (card.state == index + 1) {
+        bodyBord.appendChild(createCard(card.Tile, card.Description));
+      }
+    })
+  })
+}
+addStoregeCards();
 
 cards.forEach(card => {
   dragendCard(card);
@@ -35,13 +47,14 @@ function clsModal () {
 function addCard(btn, bodyBord) {
   btn.addEventListener('click', () => {
     modal.style.display = 'flex';
-    modal.querySelector('button:first-child').addEventListener('click', () => {
-      bodyBord.appendChild(createCard(inputTitle.value, inputDescription.value))
+    modal.querySelector('button:first-child').onclick = () => {
+      bodyBord.appendChild(createCard(inputTitle.value, inputDescription.value));
+      storeCard(inputTitle.value, inputDescription.value, bodyBord.id);
       clsModal();
       bords.forEach(bord => {
         bord.dispatchEvent(myCustonEvent);
       })
-    }, {once: true});
+    };
   });
 }
 
@@ -72,6 +85,9 @@ function optButton(card) {
   const exclude = opt.querySelector('button:last-child');
   exclude.addEventListener('click', () => {
     card.remove();
+    bords.forEach(bord => {
+      bord.dispatchEvent(myCustonEvent);
+    })
   })
 
   const edit = opt.querySelector('button:first-child');
@@ -143,4 +159,27 @@ function draggingBody(bord) {
       bodyBord.appendChild(cardDragging);
     }
   })
+}
+
+function storeCard(Tile, Description, state) {
+  const length = localStorage.length;
+
+  const card = {
+    Tile,
+    Description,
+    state
+  }
+  console.log(JSON.stringify(card));
+
+  localStorage.setItem('card-' + length, JSON.stringify(card));
+}
+
+function getCards() {
+  const cards = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    const card = JSON.parse(localStorage.getItem(key));
+    cards.push(card);
+  }
+  return cards;
 }

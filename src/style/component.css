@@ -11,6 +11,11 @@ button {
   background-color: transparent;
   color: var(--neutral-color-black-500);
   font-size: 2em;
+  transition: scale 200ms ease-in-out;
+}
+
+button:hover {
+  scale: 1.05;
 }
 
 .color-blue {
