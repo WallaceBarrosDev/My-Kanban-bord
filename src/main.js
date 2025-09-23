@@ -6,16 +6,17 @@ const inputDescription = modal.querySelector('textarea');
 const myCustonEvent = new Event('myCustonEvent');
 
 function addStoregeCards() {
+  const cards = getCards();
   bords.forEach((bord, index) => {
     const bodyBord = bord.querySelector('.body-bord');
-    const cards = getCards();
     cards.forEach(card => {
       if (card.state == index + 1) {
-        bodyBord.appendChild(createCard(card.Tile, card.Description));
+        bodyBord.appendChild(createCard(card.Tile, card.Description, 'card-'+card.id));
       }
     })
   })
 }
+
 addStoregeCards();
 
 cards.forEach(card => {
@@ -48,8 +49,9 @@ function addCard(btn, bodyBord) {
   btn.addEventListener('click', () => {
     modal.style.display = 'flex';
     modal.querySelector('button:first-child').onclick = () => {
-      bodyBord.appendChild(createCard(inputTitle.value, inputDescription.value));
+      bodyBord.appendChild(createCard(inputTitle.value, inputDescription.value, 'card-'+localStorage.length));
       storeCard(inputTitle.value, inputDescription.value, bodyBord.id);
+      console.log("teste")
       clsModal();
       bords.forEach(bord => {
         bord.dispatchEvent(myCustonEvent);
@@ -58,7 +60,7 @@ function addCard(btn, bodyBord) {
   });
 }
 
-function createCard(title, description) {
+function createCard(title, description, id) {
   const card = document.createElement('div');
   card.classList.add('card');
 
@@ -72,6 +74,7 @@ function createCard(title, description) {
     </div>
   `;
 
+  card.id = id;
   dragendCard(card);
   btnCard(card);
   optButton(card);
@@ -85,6 +88,7 @@ function optButton(card) {
   const exclude = opt.querySelector('button:last-child');
   exclude.addEventListener('click', () => {
     card.remove();
+    deleteCard(card.id);
     bords.forEach(bord => {
       bord.dispatchEvent(myCustonEvent);
     })
@@ -94,8 +98,17 @@ function optButton(card) {
   edit.addEventListener('click', () => {
     inputTitle.value = card.querySelector('h2').textContent;
     inputDescription.value = card.querySelector('p').textContent;
-    modal.style.display = 'flex';
-    modal.querySelector('button:first-child').addEventListener('click', () => {
+    const btnsave = document.querySelector('#save');
+    btnsave.addEventListener('click', () => {
+      const id = parseInt(card.id.split('-')[1]);
+      const newCard = JSON.stringify({
+        id: id,
+        Tile: card.querySelector('h2').textContent || '',
+        Description: card.querySelector('p').textContent || '',
+        state: card.parentElement.id
+      });
+      console.log(newCard);
+      localStorage.setItem(card.id, newCard);
       card.querySelector('h2').textContent = inputTitle.value;
       card.querySelector('p').textContent = inputDescription.value;
       clsModal();
@@ -121,6 +134,14 @@ function dragendCard(card) {
 
   card.addEventListener('dragend', () => {
     card.classList.remove('dragging');
+    const id = parseInt(card.id.split('-')[1]);
+    localStorage.setItem(card.id, JSON.stringify({
+      id: id,
+      Tile: card.querySelector('h2').textContent,
+      Description: card.querySelector('p').textContent,
+      state: card.parentElement.id
+    }));
+
     bords.forEach(bord => {
       bord.dispatchEvent(myCustonEvent);
     })
@@ -165,6 +186,7 @@ function storeCard(Tile, Description, state) {
   const length = localStorage.length;
 
   const card = {
+    id: length,
     Tile,
     Description,
     state
@@ -179,7 +201,12 @@ function getCards() {
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
     const card = JSON.parse(localStorage.getItem(key));
-    cards.push(card);
+    cards[i] = card;
   }
   return cards;
+}
+
+// a função deve deletar o card do localStorage
+function deleteCard(id) {
+  localStorage.removeItem(id);
 }
