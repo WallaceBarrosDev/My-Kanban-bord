@@ -1,5 +1,27 @@
+import { draggingBord, draggingCard } from "./scripts/dragdrop.js"
+import { bordEvents, buttonCardEvent } from "./scripts/events.js"
+import { getCard, getAllCards, saveNewCard, updateCard, deleteCard } from "./scripts/api-localstore.js"
+
 const cards = document.querySelectorAll('.card');
 const bords = document.querySelectorAll('.bord');
+const modal = document.querySelector('.modal');
+
+deleteCard('card-1');
+console.log(getAllCards());
+
+cards.forEach(card => {
+  draggingCard(card);
+  buttonCardEvent(card, modal);
+})
+
+bords.forEach(bord => {
+  draggingBord(bord);
+  bordEvents(bord, modal);
+})
+
+// ==> OLD <== //
+
+/*
 const modal = document.querySelector('.modal');
 const inputTitle = modal.querySelector('input');
 const inputDescription = modal.querySelector('textarea');
@@ -30,7 +52,7 @@ bords.forEach(bord => {
 
   const bodyBord = bord.querySelector('.body-bord');
   const btn = bord.querySelector('.addCard');
-  addCard(btn, bodyBord);
+ addCard(btn, bodyBord);
 })
 
 modal.querySelector('button:last-child').addEventListener('click', () => {
@@ -58,28 +80,6 @@ function addCard(btn, bodyBord) {
       })
     };
   });
-}
-
-function createCard(title, description, id) {
-  const card = document.createElement('div');
-  card.classList.add('card');
-
-  card.innerHTML = `
-    <h2>${title}</h2>
-    <p>${description}</p>
-    <button>...</button>
-    <div class="opt">
-      <button>Editar</button>
-      <button>Excluir</button>
-    </div>
-  `;
-
-  card.id = id;
-  dragendCard(card);
-  btnCard(card);
-  optButton(card);
-
-  return card;
 }
 
 function optButton(card) {
@@ -125,61 +125,8 @@ function btnCard(card) {
 }
 
 // Drag and Drop
-function dragendCard(card) {
-  card.draggable = true;
-
-  card.addEventListener('dragstart', () => {
-    card.classList.add('dragging');
-  })
-
-  card.addEventListener('dragend', () => {
-    card.classList.remove('dragging');
-    const id = parseInt(card.id.split('-')[1]);
-    localStorage.setItem(card.id, JSON.stringify({
-      id: id,
-      Tile: card.querySelector('h2').textContent,
-      Description: card.querySelector('p').textContent,
-      state: card.parentElement.id
-    }));
-
-    bords.forEach(bord => {
-      bord.dispatchEvent(myCustonEvent);
-    })
-  })
-}
 
 function draggingBody(bord) {
-  const bodyBord = bord.querySelector('.body-bord');
-
-  bord.addEventListener('myCustonEvent', () => {
-    const amoutCards = bodyBord.querySelectorAll('.card').length;
-    const amoutText = bord.querySelector('.header-bord > span');
-    amoutText.textContent = amoutCards;
-  })
-
-  bord.dispatchEvent(myCustonEvent);
-
-  bodyBord.addEventListener('dragover', e => {
-    e.preventDefault();
-  })
-
-  bodyBord.addEventListener('dragenter', () => {
-    if (bodyBord.classList.contains('dragzone')) {
-      bodyBord.classList.add('dragover');
-    }
-  })
-
-  bodyBord.addEventListener('dragleave', () => {
-    bodyBord.classList.remove('dragover');
-  })
-
-  bodyBord.addEventListener('drop', () => {
-    if (bodyBord.classList.contains('dragzone')) {
-      bodyBord.classList.remove('dragover');
-      const cardDragging = document.querySelector('.dragging');
-      bodyBord.appendChild(cardDragging);
-    }
-  })
 }
 
 function storeCard(Tile, Description, state) {
@@ -210,3 +157,4 @@ function getCards() {
 function deleteCard(id) {
   localStorage.removeItem(id);
 }
+*/
