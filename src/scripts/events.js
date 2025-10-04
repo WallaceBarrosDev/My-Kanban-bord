@@ -1,4 +1,5 @@
 import { draggingCard } from "./dragdrop.js"
+import { updateAmountCard } from "../main.js"
 
 const modal = document.querySelector('.modal');
 const cardTitleModal = modal.querySelector('input');
@@ -14,6 +15,14 @@ export function bordEvents(bord) {
   addNewCard.addEventListener('click', () => {
     modal.style.display = 'flex';
     addNewCardInModal(bord);
+  });
+}
+
+export function amountCardEvent(bord) {
+  document.addEventListener('updateAmountCard', () => {
+    const amountCard = bord.querySelector('.header-bord > span');
+    const amount = bord.querySelectorAll('.card').length;
+    amountCard.textContent = amount;
   });
 }
 
@@ -47,6 +56,8 @@ export function buttonCardEvent(card) {
       modal.style.display = 'none';
       clsModal(modal);
     });
+
+    document.dispatchEvent(updateAmountCard);
   });
 
   exclude.addEventListener('click', () => {
@@ -90,6 +101,7 @@ const addNewCardInModal = bord => btnAdd.onclick = () => {
   bord.querySelector('.body-bord').appendChild(newCard);
   modal.style.display = 'none';
   clsModal();
+  document.dispatchEvent(updateAmountCard);
 };
 
 const cancelModal = () => btnCancel.addEventListener('click', () => {

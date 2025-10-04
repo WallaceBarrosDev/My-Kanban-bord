@@ -1,3 +1,5 @@
+import { updateAmountCard } from "../main.js"
+
 export function draggingCard(card) {
   card.draggable = true;
 
@@ -7,6 +9,7 @@ export function draggingCard(card) {
 
   card.addEventListener('dragend', () => {
     card.classList.remove('dragging');
+    document.dispatchEvent(updateAmountCard);
   })
 }
 
