@@ -1,5 +1,6 @@
 import { draggingCard } from "./dragdrop.js"
 import { updateAmountCard } from "../main.js"
+import { saveNewCard } from "./api-localstore.js";
 
 const modal = document.querySelector('.modal');
 const cardTitleModal = modal.querySelector('input');
@@ -48,7 +49,7 @@ export function buttonCardEvent(card) {
     modalAdd.style.display = 'none';
     modalSave.style.display = 'block';
 
-    modal.querySelector('#save').addEventListener('click', () => {
+    modalSave.addEventListener('click', () => {
       card.querySelector('h2').textContent = modal.querySelector('input').value;
       card.querySelector('p').textContent = modal.querySelector('textarea').value;
       modalAdd.style.display = 'block';
@@ -65,7 +66,7 @@ export function buttonCardEvent(card) {
   });
 }
 
-function createCard(title, description, id) {
+export function createCard(title, description, id) {
   const card = document.createElement('div');
   card.classList.add('card');
 
@@ -92,13 +93,17 @@ export function clsModal () {
 }
 
 const addNewCardInModal = bord => btnAdd.onclick = () => {
-  const newCard = createCard(
-    cardTitleModal.value,
-    cardDescriptionModal.value,
-    'card-'+localStorage.length
-  );
+  const newCard = {
+    title: cardTitleModal.value,
+    description: cardDescriptionModal.value,
+    table: bord.querySelector('.body-bord').id  
+  }
 
-  bord.querySelector('.body-bord').appendChild(newCard);
+  const newId = `card-${localStorage.length}`;
+  saveNewCard(newCard, newId);
+
+  const newCardElement = createCard(newCard.title, newCard.description, newId)
+  bord.querySelector('.body-bord').appendChild(newCardElement);
   modal.style.display = 'none';
   clsModal();
   document.dispatchEvent(updateAmountCard);

@@ -9,15 +9,14 @@ export function getAllCards() {
 
   for(let i = 0; i < localStorage.length; i++) {
     const card = JSON.parse(localStorage.getItem(`card-${i}`));
-    cards.push(card);
+    cards.push(card)
   }
 
   return cards;
 }
 
-export function saveNewCard(card) {
-  const newId = localStorage.length;
-  localStorage.setItem(`card-${newId}`, JSON.stringify(card));
+export function saveNewCard(newCard, newId) {
+  localStorage.setItem(newId, JSON.stringify(newCard));
   console.log('novo card criado.');
 }
 
