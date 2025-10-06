@@ -1,4 +1,5 @@
 import { updateAmountCard } from "../main.js"
+import { updateElementCard } from "./events.js";
 
 export function draggingCard(card) {
   card.draggable = true;
@@ -9,6 +10,7 @@ export function draggingCard(card) {
 
   card.addEventListener('dragend', () => {
     card.classList.remove('dragging');
+    updateElementCard(card);
     document.dispatchEvent(updateAmountCard);
   })
 }

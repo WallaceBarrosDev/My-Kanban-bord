@@ -14,5 +14,3 @@ export function controllerBord(bord) {
     bodyBord.appendChild(newCard);
   })
 }
-
-//document.createElement("div").(node)

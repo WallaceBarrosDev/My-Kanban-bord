@@ -1,6 +1,6 @@
 import { draggingCard } from "./dragdrop.js"
 import { updateAmountCard } from "../main.js"
-import { saveNewCard } from "./api-localstore.js";
+import { deleteCard, saveNewCard, updateCard } from "./api-localstore.js";
 
 const modal = document.querySelector('.modal');
 const cardTitleModal = modal.querySelector('input');
@@ -50,6 +50,14 @@ export function buttonCardEvent(card) {
     modalSave.style.display = 'block';
 
     modalSave.addEventListener('click', () => {
+      const newCard = {
+        title: modal.querySelector('input').value,
+        description: modal.querySelector('textarea').value,
+        table: card.parentElement.id
+      }
+
+      updateCard(card.id, newCard);
+
       card.querySelector('h2').textContent = modal.querySelector('input').value;
       card.querySelector('p').textContent = modal.querySelector('textarea').value;
       modalAdd.style.display = 'block';
@@ -62,7 +70,9 @@ export function buttonCardEvent(card) {
   });
 
   exclude.addEventListener('click', () => {
+    deleteCard(card.id);
     card.remove();
+    document.dispatchEvent(updateAmountCard);
   });
 }
 
@@ -115,3 +125,13 @@ const cancelModal = () => btnCancel.addEventListener('click', () => {
   btnSave.style.display = 'none';
   clsModal();
 });
+
+export function updateElementCard(card) {
+  const newCard = {
+    title: card.querySelector('h2').textContent,
+    description: card.querySelector('p').textContent,
+    table: card.parentElement.id  
+  }
+
+  updateCard(card.id, newCard);
+}

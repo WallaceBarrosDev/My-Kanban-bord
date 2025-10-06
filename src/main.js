@@ -1,17 +1,10 @@
-import { draggingBord, draggingCard } from "./scripts/dragdrop.js"
-import { bordEvents, buttonCardEvent, amountCardEvent } from "./scripts/events.js"
-//import { getCard, getAllCards, saveNewCard, updateCard, deleteCard } from "./scripts/api-localstore.js"
+import { draggingBord } from "./scripts/dragdrop.js"
+import { bordEvents, amountCardEvent } from "./scripts/events.js"
 import {controllerBord} from "./scripts/controllers.js";
 export const updateAmountCard = new Event('updateAmountCard');
 
-const cards = document.querySelectorAll('.card');
 const bords = document.querySelectorAll('.bord');
 const modal = document.querySelector('.modal');
-
-cards.forEach(card => {
-  draggingCard(card);
-  buttonCardEvent(card, modal);
-});
 
 bords.forEach(bord => {
   controllerBord(bord)
