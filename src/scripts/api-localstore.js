@@ -1,5 +1,3 @@
-// card = { title, description, status };
-
 export function getCard(id) {
   return JSON.parse(localStorage.getItem(id));
 }

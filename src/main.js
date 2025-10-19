@@ -1,6 +1,6 @@
 import { draggingBord } from "./scripts/dragdrop.js"
 import { bordEvents, amountCardEvent } from "./scripts/events.js"
-import {controllerBord} from "./scripts/controllers.js";
+import { controllerBord } from "./scripts/controllers.js";
 export const updateAmountCard = new Event('updateAmountCard');
 
 const bords = document.querySelectorAll('.bord');

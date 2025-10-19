@@ -1,6 +1,7 @@
 import { draggingCard } from "./dragdrop.js"
 import { updateAmountCard } from "../main.js"
-import { deleteCard, saveNewCard, updateCard } from "./api-localstore.js";
+//import { deleteCard, saveNewCard, updateCard } from "./api-localstore.js"
+import { deleteCard, saveNewCard, updateCard } from "./api-server.js";
 
 const modal = document.querySelector('.modal');
 const cardTitleModal = modal.querySelector('input');
@@ -50,13 +51,7 @@ export function buttonCardEvent(card) {
     modalSave.style.display = 'block';
 
     modalSave.addEventListener('click', () => {
-      const newCard = {
-        title: modal.querySelector('input').value,
-        description: modal.querySelector('textarea').value,
-        table: card.parentElement.id
-      }
-
-      updateCard(card.id, newCard);
+      updateElementCard(card);
 
       card.querySelector('h2').textContent = modal.querySelector('input').value;
       card.querySelector('p').textContent = modal.querySelector('textarea').value;
@@ -70,7 +65,8 @@ export function buttonCardEvent(card) {
   });
 
   exclude.addEventListener('click', () => {
-    deleteCard(card.id);
+    const id = parseInt(card.id.replace('card-', ''));
+    deleteCard(id);
     card.remove();
     document.dispatchEvent(updateAmountCard);
   });
@@ -102,15 +98,14 @@ export function clsModal () {
   cardDescriptionModal.value = '';
 }
 
-const addNewCardInModal = bord => btnAdd.onclick = () => {
+const addNewCardInModal = async bord => btnAdd.onclick = async () => {
   const newCard = {
     title: cardTitleModal.value,
     description: cardDescriptionModal.value,
-    table: bord.querySelector('.body-bord').id  
+    table_id: bord.querySelector('.body-bord').id  
   }
 
-  const newId = `card-${localStorage.length}`;
-  saveNewCard(newCard, newId);
+  const newId = await saveNewCard(newCard);
 
   const newCardElement = createCard(newCard.title, newCard.description, newId)
   bord.querySelector('.body-bord').appendChild(newCardElement);
@@ -130,8 +125,9 @@ export function updateElementCard(card) {
   const newCard = {
     title: card.querySelector('h2').textContent,
     description: card.querySelector('p').textContent,
-    table: card.parentElement.id  
+    table_id: parseInt(card.parentElement.id)  
   }
+  const id = parseInt(card.id.replace('card-', ''));
 
-  updateCard(card.id, newCard);
+  updateCard(id, newCard);
 }
