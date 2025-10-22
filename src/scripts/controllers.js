@@ -1,9 +1,9 @@
+import {url} from "../main.js";
 import { getAllCards } from "./api-server.js";
 import { createCard } from "./events.js";
 
-const cards = await getAllCards();
-
-export function controllerBord(bord) {
+export async function controllerBord(bord) {
+  const cards = await getAllCards(url);
   const bodyBord = bord.querySelector(".body-bord");
   if (cards == null) return;
 

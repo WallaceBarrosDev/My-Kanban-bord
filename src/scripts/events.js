@@ -1,5 +1,5 @@
 import { draggingCard } from "./dragdrop.js"
-import { updateAmountCard } from "../main.js"
+import { updateAmountCard, url } from "../main.js"
 //import { deleteCard, saveNewCard, updateCard } from "./api-localstore.js"
 import { deleteCard, saveNewCard, updateCard } from "./api-server.js";
 
@@ -66,7 +66,7 @@ export function buttonCardEvent(card) {
 
   exclude.addEventListener('click', () => {
     const id = parseInt(card.id.replace('card-', ''));
-    deleteCard(id);
+    deleteCard(url, id);
     card.remove();
     document.dispatchEvent(updateAmountCard);
   });
@@ -105,7 +105,7 @@ const addNewCardInModal = async bord => btnAdd.onclick = async () => {
     table_id: bord.querySelector('.body-bord').id  
   }
 
-  const newId = await saveNewCard(newCard);
+  const newId = await saveNewCard(url, newCard);
 
   const newCardElement = createCard(newCard.title, newCard.description, newId)
   bord.querySelector('.body-bord').appendChild(newCardElement);
@@ -129,5 +129,5 @@ export function updateElementCard(card) {
   }
   const id = parseInt(card.id.replace('card-', ''));
 
-  updateCard(id, newCard);
+  updateCard(url, id, newCard);
 }

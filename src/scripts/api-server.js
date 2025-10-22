@@ -1,6 +1,6 @@
-export async function getAllCards() {
+export async function getAllCards(url) {
   try {
-    const response = await fetch('http://localhost:3000');
+    const response = await fetch(url);
     const cards = await response.json();
     return cards;
   } catch (error) {
@@ -8,9 +8,9 @@ export async function getAllCards() {
   }
 }
 
-export async function getCard(id) {
+export async function getCard(url, id) {
   try {
-    const response = await fetch(`http://localhost:3000/${id}`);
+    const response = await fetch(`${url}/${id}`);
     const card = await response.json();
     return card;
   } catch (error) {
@@ -18,9 +18,9 @@ export async function getCard(id) {
   }
 }
 
-export async function saveNewCard(newCard) {
+export async function saveNewCard(url, newCard) {
   try {
-    const response = await fetch('http://localhost:3000', {
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -35,9 +35,9 @@ export async function saveNewCard(newCard) {
   }
 }
 
-export async function updateCard(id, newCard) {
+export async function updateCard(url, id, newCard) {
   try {
-    const response = await fetch(`http://localhost:3000/${id}`, {
+    const response = await fetch(`${url}/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -51,9 +51,9 @@ export async function updateCard(id, newCard) {
   }
 }
 
-export async function deleteCard(id) {
+export async function deleteCard(url, id) {
   try {
-    await fetch(`http://localhost:3000/${id}`, {
+    await fetch(`${url}/${id}`, {
       method: 'DELETE'
     });
     console.log('card deletado.');
